@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Запрошення на весілля — Андрій & Вікторія</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#f8efe6">
+  <meta name="description" content="Запрошення на весілля — Марія і Олександр. Підтвердьте присутність онлайн.">
+</head>
+<body class="intro-active">
+  <div class="intro-video-overlay" id="intro-video-overlay" role="dialog" aria-label="Вступне відео">
+    <video id="intro-video-player" class="intro-video-player" autoplay muted playsinline preload="auto">
+      <source src="Gen-4%20Turbo%20Ultra%20realistic%20cinematic%20macro%20shot%20of%20a%20luxury%20wedding%20envelope%20filling%20the%20entire%20frame%20Background%20is%20soft%20beige%20gradient,%20no%20table,%20no%20objects%20Envelope%20is%20matte%20beige%20paperIn%20the%20ce%20(1).mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <main class="card" id="site-content" inert aria-hidden="true">
+    <header class="hero page-section">
+      <div class="banner">
+        <img class="banner-img" src="feature1.jpg" alt="banner photo of sun and landscape">
+        <div class="names overlay"><span class="names-line">Андрій &amp; Вікторія</span></div>
+      </div>
+    </header>
+
+    <!-- event-info removed to avoid duplication; separate info block below contains date and location -->
+
+    <section class="message page-section" aria-label="Історія про нас">
+      <h2>Історія про нас</h2>
+      <p>Ми познайомилися випадково, але з першої розмови зрозуміли, що хочемо проходити цей шлях разом. Кава після роботи швидко перетворилася на довгі прогулянки, мрії та спільні плани.</p>
+      <p>За цей час у нас було багато теплих моментів: подорожі, сімейні вечори, підтримка одне одного у важливі миті та щирий сміх без причини. Саме ці прості дні навчили нас, що справжнє щастя — бути поруч.</p>
+      <p>Тепер ми з радістю запрошуємо вас розділити з нами один із найважливіших днів нашого життя. Для нас велика честь святкувати його разом із близькими людьми.</p>
+    </section>
+
+    <section class="countdown-block page-section" aria-live="polite">
+      <div class="countdown" id="countdown">
+        <div class="countdown-item"><span id="cd-days">0</span><small>днів</small></div>
+        <div class="countdown-item"><span id="cd-hours">0</span><small>годин</small></div>
+        <div class="countdown-item"><span id="cd-minutes">0</span><small>хвилин</small></div>
+        <div class="countdown-item"><span id="cd-seconds">0</span><small>секунд</small></div>
+      </div>
+      <p id="countdown-note" class="countdown-note"></p>
+    </section>
+
+    <!-- Program section -->
+    <section class="details layout-grid page-section">
+      <div class="left">
+        <section class="program" aria-label="Програма дня">
+          <h2 class="program-title">Програма</h2>
+
+          <div class="schedule">
+            <div class="schedule-line" aria-hidden="true"></div>
+
+            <article class="schedule-item schedule-item--left">
+              <p class="schedule-date">20 червня 2026</p>
+              <h3>Welcome drinks</h3>
+              <p class="schedule-time">15:30</p>
+              <p class="schedule-desc">Починаємо наш день з легкої зустрічі гостей, знайомств і келиха ігристого в затишній атмосфері локації.</p>
+              <button
+                type="button"
+                class="schedule-btn"
+                data-title="Весілля Андрія та Вікторії — Welcome drinks"
+                data-start="2026-06-20T15:30:00"
+                data-end="2026-06-20T16:00:00"
+                data-location="Літепло"
+                data-description="Welcome drinks перед церемонією."
+              >Додати в календар</button>
+            </article>
+
+            <article class="schedule-item schedule-item--right">
+              <p class="schedule-date">20 червня 2026</p>
+              <h3>Церемонія</h3>
+              <p class="schedule-time">16:00</p>
+              <p class="schedule-desc">Офіційна частина розпочнеться на головній терасі. Просимо прибути трохи завчасно, щоб зайняти зручні місця.</p>
+            </article>
+
+            <article class="schedule-item schedule-item--full">
+              <p class="schedule-date">20 червня 2026</p>
+              <h3>Reception</h3>
+              <p class="schedule-time">18:30</p>
+              <p class="schedule-desc">Після церемонії на вас чекають святкова вечеря, музика, танці та багато теплих моментів разом із нами.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Dresscode section -->
+    <section class="details layout-grid page-section">
+      <div class="left">
+        <section class="dresscode" aria-label="Дрескод">
+          <h2>Дрескод</h2>
+          <div class="dresscode-palette" role="group" aria-label="Палітра дрескоду">
+            <div class="dresscode-col dresscode-col--left">
+              <div class="dresscode-color white" aria-label="Білий"></div>
+              <div class="dresscode-color soft-yellow" aria-label="Лагідно жовтий"></div>
+            </div>
+            <div class="dresscode-divider" aria-hidden="true"></div>
+            <div class="dresscode-col dresscode-col--right">
+              <div class="dresscode-color beige" aria-label="Бежевий"></div>
+              <div class="dresscode-color brown" aria-label="Коричневий"></div>
+              <div class="dresscode-color black" aria-label="Чорний"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="rsvp-section page-section">
+      <div class="rsvp">
+        <h2>Підтвердити присутність</h2>
+        <form id="rsvp-form">
+          <label>Ім'я
+            <input type="text" id="name" required placeholder="Ваше ім'я">
+          </label>
+
+          <label>Приходите?
+            <select id="attending">
+              <option value="yes">Так, буду</option>
+              <option value="no">Нажаль, ні</option>
+            </select>
+          </label>
+
+          <label>Кількість гостей
+            <input type="number" id="guests" min="0" max="10" value="0">
+          </label>
+
+          <label>Повідомлення
+            <textarea id="note" rows="3" placeholder="Побажання або деталі"></textarea>
+          </label>
+
+          <button type="submit" class="btn">Відправити</button>
+        </form>
+        <div id="rsvp-result" class="result" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="map-section page-section">
+      <div class="map-side">
+        <h2>Локація</h2>
+        <iframe
+          src="https://www.google.com/maps?q=Літепло+Кобзарівська+Тернопільська+47250&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          aria-label="Карта локації Літепло"></iframe>
+      </div>
+    </section>
+
+   
+    <footer class="contact page-section">
+      <p>Питання: +380 99 123 4567</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
