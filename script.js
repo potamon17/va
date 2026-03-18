@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', ()=>{
+  const RSVP_TARGET_EMAIL = 'tancorov.andriy@gmail.com';
   const introOverlay = document.getElementById('intro-video-overlay');
   const introVideo = document.getElementById('intro-video-player');
   const siteContent = document.getElementById('site-content');
@@ -74,8 +75,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }catch(e){console.warn(e)}
   }
 
-  form.addEventListener('submit', (e)=>{
+  form.addEventListener('submit', async (e)=>{
     e.preventDefault();
+
+    const submitBtn = form.querySelector('.btn');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Відправляємо...';
+    }
+
     const data = {
       name: document.getElementById('name').value.trim(),
       attending: document.getElementById('attending').value,
@@ -83,9 +91,60 @@ document.addEventListener('DOMContentLoaded', ()=>{
       note: document.getElementById('note').value.trim(),
       ts: Date.now()
     };
+
+    const attendingLabel = data.attending === 'yes' ? 'Так, буду' : 'Нажаль, ні';
+    const submittedAt = new Date(data.ts).toLocaleString('uk-UA');
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(RSVP_TARGET_EMAIL)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: 'Нове підтвердження присутності на весілля',
+          _template: 'table',
+          _captcha: 'false',
+          _cc: 'kivaa1998@gmail.com',
+          "Ім'я": data.name,
+          'Приходить': attendingLabel,
+          'Кількість гостей': data.guests,
+          'Повідомлення': data.note || '—',
+          'Час відправки': submittedAt
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json();
+      if (payload && payload.success === 'false') {
+        throw new Error(payload.message || 'FormSubmit rejected request');
+      }
+    } catch (error) {
+      if (result) {
+        result.textContent = 'Не вдалося надіслати на пошту. Спробуйте ще раз.';
+        result.style.color = '#b42318';
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Відправити';
+      }
+      console.warn('RSVP email send error:', error);
+      return;
+    }
+
     localStorage.setItem('rsvp', JSON.stringify(data));
-    result.textContent = data.attending === 'yes' ? `Дякуємо, ${data.name}! Чекаємо на вас на весіллі Андрія і Вікторії.` : `Дякуємо за відповідь, ${data.name}.`;
-    form.querySelector('.btn').textContent = 'Збережено';
+    if (result) {
+      result.textContent = data.attending === 'yes' ? `Дякуємо, ${data.name}! Повідомлення відправлено на пошту.` : `Дякуємо за відповідь, ${data.name}. Повідомлення відправлено на пошту.`;
+      result.style.color = 'green';
+    }
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Збережено';
+    }
   });
 
   const targetDate = new Date(2026, 5, 20, 0, 0, 0);
