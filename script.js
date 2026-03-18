@@ -209,9 +209,32 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 
   const sections = document.querySelectorAll('.page-section');
-  if (sections.length && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (sections.length && !prefersReducedMotion) {
     document.body.classList.add('scroll-animated');
     sections[0].classList.add('is-visible');
+
+    const revealGroups = [
+      '.message h2',
+      '.message p',
+      '.countdown-item',
+      '.schedule-item',
+      '.dresscode-image-wrap',
+      '.rsvp',
+      '.map-side',
+      '.contact p'
+    ];
+
+    revealGroups.forEach((selector) => {
+      const nodes = document.querySelectorAll(selector);
+      nodes.forEach((node, index) => {
+        node.classList.add('reveal-block');
+        node.style.setProperty('--reveal-delay', `${index * 90}ms`);
+      });
+    });
+
+    const revealBlocks = document.querySelectorAll('.reveal-block');
 
     let currentSectionIndex = 0;
     let isTransitioning = false;
@@ -271,5 +294,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
 
     sections.forEach((section) => observer.observe(section));
+
+    const blockObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        blockObserver.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0.22,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealBlocks.forEach((block) => blockObserver.observe(block));
   }
 });

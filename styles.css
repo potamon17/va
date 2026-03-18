@@ -95,6 +95,18 @@ body.intro-reveal .intro-video-overlay{
   transform:none;
 }
 
+.scroll-animated .reveal-block{
+  opacity:0;
+  transform:translateY(22px) scale(0.98);
+  transition:opacity 620ms ease, transform 620ms ease;
+  transition-delay:var(--reveal-delay, 0ms);
+}
+
+.scroll-animated .reveal-block.is-visible{
+  opacity:1;
+  transform:none;
+}
+
 /* apply padding to all direct children of .card except the header (hero) */
 .card > :not(.hero){
   padding:36px;
@@ -174,15 +186,26 @@ body.intro-reveal .intro-video-overlay{
 .schedule-item--full::before {left: unset; right: unset; top: 0;}
 .dresscode{ margin-top:20px; text-align:center }
 .dresscode h2{ margin:0 0 8px }
-.dresscode-palette{ display:grid; grid-template-columns:1fr 1px 1fr; gap:26px; align-items:center; max-width:720px; margin:0 auto }
-.dresscode-col{ display:flex; flex-direction:column; gap:16px; align-items:center }
-.dresscode-divider{ width:1px; height:226px; background:#d9b483; justify-self:center }
-.dresscode-color{ width:100%; max-width:320px; height:68px; border-radius:14px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 3px 10px rgba(0,0,0,0.04) }
-.dresscode-color.white{ background:#efebe5 }
-.dresscode-color.soft-yellow{ background:#e7cfad }
-.dresscode-color.beige{ background:#d8cbc0 }
-.dresscode-color.brown{ background:#c6c7b9 }
-.dresscode-color.black{ background:#6c8493 }
+.dresscode-palette{ display:grid; grid-template-columns:1fr 1fr; gap:18px 44px; max-width:430px; margin:0 auto; padding-top:6px }
+.dresscode-col{ display:flex; flex-direction:column; gap:10px }
+.dresscode-col--left{ align-items:flex-start }
+.dresscode-col--right{ align-items:flex-end }
+.dresscode-image-wrap{
+  width:114px;
+  aspect-ratio:1 / 1;
+  border-radius:50%;
+  overflow:hidden;
+  border:none;
+  box-shadow:0 10px 26px rgba(0,0,0,0.12);
+  background:#f6ede4;
+}
+.dresscode-col .dresscode-image-wrap{ margin:0 }
+.dresscode-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 
 .bottom-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start }
 .map-side h2{ margin:12px 0 8px }
@@ -198,9 +221,9 @@ body.intro-reveal .intro-video-overlay{
   .message h2{ font-size:18px; margin-bottom:8px }
   .message p{ font-size:14px; line-height:1.4 }
   .message p:nth-of-type(3){ display:none }
-  .dresscode-palette{ grid-template-columns:1fr; gap:14px; }
-  .dresscode-divider{ display:none }
-  .dresscode-color{ max-width:360px }
+  .dresscode-palette{ max-width:320px; gap:14px 18px }
+  .dresscode-col{ gap:8px }
+  .dresscode-image-wrap{ width:96px }
   .program{ margin-top:0 }
   .program-title{ margin:0 0 16px; font-size:14px }
   .schedule{ grid-template-columns:1fr; gap:16px; max-width:100%; padding:0 }
@@ -269,6 +292,11 @@ input[type="text"], input[type="number"], select, textarea{
     overflow:visible;
   }
   .scroll-animated .page-section{
+    opacity:1;
+    transform:none;
+    transition:none;
+  }
+  .scroll-animated .reveal-block{
     opacity:1;
     transform:none;
     transition:none;
