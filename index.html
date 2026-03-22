@@ -13,7 +13,7 @@
 </head>
 <body class="intro-active">
   <div class="intro-video-overlay" id="intro-video-overlay" role="dialog" aria-label="Вступне відео">
-    <video id="intro-video-player" class="intro-video-player" autoplay muted playsinline preload="auto">
+    <video id="intro-video-player" class="intro-video-player" muted playsinline preload="auto">
       <source src="Gen-4%20Turbo%20Ultra%20realistic%20cinematic%20macro%20shot%20of%20a%20luxury%20wedding%20envelope%20filling%20the%20entire%20frame%20Background%20is%20soft%20beige%20gradient,%20no%20table,%20no%20objects%20Envelope%20is%20matte%20beige%20paperIn%20the%20ce%20(1).mp4" type="video/mp4">
     </video>
   </div>
@@ -21,30 +21,17 @@
   <main class="card" id="site-content" inert aria-hidden="true">
     <header class="hero page-section">
       <div class="banner">
-        <img class="banner-img" src="feature1.jpg" alt="banner photo of sun and landscape">
+        <img class="banner-img" src="IMG_2114.jpg" alt="banner photo of sun and landscape">
         <div class="names overlay"><span class="names-line">Андрій &amp; Вікторія</span></div>
       </div>
     </header>
 
-    <!-- event-info removed to avoid duplication; separate info block below contains date and location -->
-
-    <section class="message page-section" aria-label="Історія про нас">
-      <h2>Історія про нас</h2>
-      <p> Ми познайомилися на роботі —
-у ресторані «На Небі».
-Він працював барменом, вона — хостес.
-Довгий час ми просто були поруч —
-у тих самих змінах, серед тих самих людей,
-але ніби в різних світах.
-Майже через рік усе змінилося.
-Одного дня він трохи хитро запросив її на прогулянку зі спільними друзями.
-Звичайний вечір несподівано став особливим.
-Розмови не закінчувались, час минав непомітно,
-і з того моменту ми вже не розходилися.
-Наша історія доводить:
-іноді найважливіші зустрічі трапляються не одразу —
-але саме тоді, коли настає правильний час 💛</p>  
+    <section class="announcement page-section" aria-label="Оголошення">
+      <p>Так, нарешті це сталося!<br>Ми одружуємось! 💍<br>І цей день не буде повним без вас 🤍</p>
+      <p class="announcement-date">20 червня 2026</p>
     </section>
+
+    <!-- event-info removed to avoid duplication; separate info block below contains date and location -->
 
     <section class="countdown-block page-section" aria-live="polite">
       <div class="countdown" id="countdown">
@@ -54,6 +41,18 @@
         <div class="countdown-item"><span id="cd-seconds">0</span><small>секунд</small></div>
       </div>
       <p id="countdown-note" class="countdown-note"></p>
+    </section>
+
+    <section class="map-section page-section">
+      <div class="map-side">
+        <h2>Локація</h2>
+        <p class="map-address">Адреса локації:<br>Тернопільська обл.,<br>село Кобзарівка</p>
+        <iframe
+          src="https://www.google.com/maps?q=Літепло+Кобзарівська+Тернопільська+47250&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          aria-label="Карта локації Літепло"></iframe>
+      </div>
     </section>
 
     <!-- Program section -->
@@ -69,7 +68,6 @@
               <p class="schedule-date">20 червня 2026</p>
               <h3>Welcome drinks</h3>
               <p class="schedule-time">15:30</p>
-              <p class="schedule-desc">Починаємо наш день з легкої зустрічі гостей, знайомств і келиха ігристого в затишній атмосфері локації.</p>
               <button
                 type="button"
                 class="schedule-btn"
@@ -85,14 +83,12 @@
               <p class="schedule-date">20 червня 2026</p>
               <h3>Церемонія</h3>
               <p class="schedule-time">16:00</p>
-              <p class="schedule-desc">Офіційна частина розпочнеться на головній терасі. Просимо прибути трохи завчасно, щоб зайняти зручні місця.</p>
             </article>
 
             <article class="schedule-item schedule-item--full">
               <p class="schedule-date">20 червня 2026</p>
               <h3>Reception</h3>
               <p class="schedule-time">18:30</p>
-              <p class="schedule-desc">Після церемонії на вас чекають святкова вечеря, музика, танці та багато теплих моментів разом із нами.</p>
             </article>
           </div>
         </section>
@@ -100,38 +96,34 @@
     </section>
 
     <!-- Dresscode section -->
-    <section class="details layout-grid page-section">
+    <section class="details layout-grid page-section dresscode-section">
       <div class="left">
         <section class="dresscode" aria-label="Дрескод">
           <h2>Дрескод</h2>
           <div class="dresscode-palette" role="group" aria-label="Палітра дрескоду">
-            <div class="dresscode-col dresscode-col--left">
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 1">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.48.jpeg" alt="Приклад дрескоду 1">
-              </div>
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 2">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.52.jpeg" alt="Приклад дрескоду 2">
-              </div>
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 3">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.54.jpeg" alt="Приклад дрескоду 3">
-              </div>
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 4">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.56.jpeg" alt="Приклад дрескоду 4">
-              </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 1">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.48.jpeg" alt="Приклад дрескоду 1">
             </div>
-            <div class="dresscode-col dresscode-col--right">
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 5">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.51.jpeg" alt="Приклад дрескоду 5">
-              </div>
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 6">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.53.jpeg" alt="Приклад дрескоду 6">
-              </div>
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 7">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.55.jpeg" alt="Приклад дрескоду 7">
-              </div>
-              <div class="dresscode-image-wrap" aria-label="Варіант образу 8">
-                <img class="dresscode-image" src="photo_2026-03-18%2016.29.57.jpeg" alt="Приклад дрескоду 8">
-              </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 2">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.52.jpeg" alt="Приклад дрескоду 2">
+            </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 3">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.54.jpeg" alt="Приклад дрескоду 3">
+            </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 5">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.51.jpeg" alt="Приклад дрескоду 5">
+            </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 6">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.53.jpeg" alt="Приклад дрескоду 6">
+            </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 8">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.57.jpeg" alt="Приклад дрескоду 8">
+            </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 4">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.56.jpeg" alt="Приклад дрескоду 4">
+            </div>
+            <div class="dresscode-image-wrap" aria-label="Варіант образу 7">
+              <img class="dresscode-image" src="photo_2026-03-18%2016.29.55.jpeg" alt="Приклад дрескоду 7">
             </div>
           </div>
         </section>
@@ -167,18 +159,6 @@
       </div>
     </section>
 
-    <section class="map-section page-section">
-      <div class="map-side">
-        <h2>Локація</h2>
-        <iframe
-          src="https://www.google.com/maps?q=Літепло+Кобзарівська+Тернопільська+47250&output=embed"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          aria-label="Карта локації Літепло"></iframe>
-      </div>
-    </section>
-
-   
     <footer class="contact page-section">
       <p>Питання: +380 99 123 4567</p>
     </footer>

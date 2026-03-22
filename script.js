@@ -44,11 +44,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
         startIntroReveal();
       }
     });
-    const playPromise = introVideo.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => {
-        introVideo.controls = true;
-      });
+
+    let introStarted = false;
+    const startIntroPlayback = () => {
+      if (introStarted) return;
+      introStarted = true;
+      const playPromise = introVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          introVideo.controls = true;
+        });
+      }
+    };
+
+    if (introOverlay) {
+      introOverlay.addEventListener('pointerdown', startIntroPlayback, { once: true });
+      introOverlay.addEventListener('click', startIntroPlayback, { once: true });
     }
   } else {
     unlockContent();
@@ -275,8 +286,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     sections[0].classList.add('is-visible');
 
     const revealGroups = [
-      '.message h2',
-      '.message p',
+      '.announcement p',
       '.countdown-item',
       '.schedule-item',
       '.dresscode-image-wrap',
