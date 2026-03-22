@@ -60,7 +60,8 @@ body.intro-reveal .intro-video-overlay{
   justify-content:center;
   gap:16px;
   color:#fff;
-  pointer-events:none;
+  pointer-events:auto;
+  cursor:pointer;
   transition:opacity 400ms ease;
 }
 

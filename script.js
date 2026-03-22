@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   };
 
   if (introVideo) {
+    introVideo.load();
     introVideo.addEventListener('ended', finishIntro);
     introVideo.addEventListener('timeupdate', () => {
       if (!Number.isFinite(introVideo.duration) || introVideo.duration <= 0) return;
@@ -65,12 +66,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const playPromise = introVideo.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
-          finishIntro();
+          introStarted = false;
+          if (tapHint) tapHint.classList.remove('is-hidden');
         });
       }
     };
 
-    if (introOverlay) {
+    if (tapHint) {
+      tapHint.addEventListener('pointerdown', startIntroPlayback, { once: true });
+      tapHint.addEventListener('click', startIntroPlayback, { once: true });
+      tapHint.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
+    } else if (introOverlay) {
       introOverlay.addEventListener('pointerdown', startIntroPlayback, { once: true });
       introOverlay.addEventListener('click', startIntroPlayback, { once: true });
       introOverlay.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
@@ -323,7 +329,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let currentSectionIndex = 0;
     let isTransitioning = false;
     let touchStartY = 0;
-    const sectionScrollDuration = 1300;
+    const sectionScrollDuration = 850;
 
     const easeInOutCubic = (t) => (t < 0.5
       ? 4 * t * t * t
