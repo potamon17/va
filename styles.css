@@ -112,8 +112,6 @@ body.intro-reveal .intro-video-overlay{
 }
 
 .page-section{
-  height:100svh;
-  min-height:100svh;
   max-height:100svh;
   display:flex;
   flex-direction:column;
@@ -356,7 +354,7 @@ body.intro-reveal .intro-video-overlay{
   .dresscode-palette{ --dc-size:84px; --dc-gap:10px; grid-template-columns:repeat(3, var(--dc-size)); gap:var(--dc-gap) }
   .dresscode-image-wrap{ width:84px }
   .program{ margin-top:0 }
-  .program-title{ margin:0 0 16px; font-size:14px }
+  .program-title{ margin:0 0 16px; font-size:28px }
   .schedule{ grid-template-columns:1fr; gap:20px; max-width:100%; padding:0 }
   .schedule-line{ left:10px; top:8px; bottom:8px; transform:none }
   .schedule-item,
