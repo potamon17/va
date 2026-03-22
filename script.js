@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const RSVP_TARGET_EMAIL = 'tancorov.andriy@gmail.com';
   const introOverlay = document.getElementById('intro-video-overlay');
   const introVideo = document.getElementById('intro-video-player');
+  const introSong = document.getElementById('intro-song');
   const siteContent = document.getElementById('site-content');
 
   const unlockContent = () => {
@@ -57,7 +58,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
 
     let introStarted = false;
+    let songStarted = false;
     const tapHint = document.getElementById('intro-tap-hint');
+
+    const startSongPlayback = () => {
+      if (!introSong || songStarted) return;
+      const songPromise = introSong.play();
+      if (songPromise && typeof songPromise.catch === 'function') {
+        songPromise
+          .then(() => {
+            songStarted = true;
+          })
+          .catch(() => {
+            songStarted = false;
+          });
+      } else {
+        songStarted = true;
+      }
+    };
+
+    introVideo.addEventListener('play', () => {
+      introStarted = true;
+      if (tapHint) tapHint.classList.add('is-hidden');
+      startSongPlayback();
+    });
 
     const startIntroPlayback = () => {
       if (introStarted) return;
@@ -81,6 +105,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
       introOverlay.addEventListener('click', startIntroPlayback, { once: true });
       introOverlay.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
     }
+
+    startIntroPlayback();
   } else {
     unlockContent();
     goToFirstSection();
@@ -304,7 +330,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   if (sections.length && !prefersReducedMotion) {
     document.body.classList.add('scroll-animated');
-    sections[0].classList.add('is-visible');
 
     const revealGroups = [
       '.announcement p',
@@ -326,81 +351,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const revealBlocks = document.querySelectorAll('.reveal-block');
 
-    let currentSectionIndex = 0;
-    let isTransitioning = false;
-    let touchStartY = 0;
-    const sectionScrollDuration = 850;
-
-    const easeInOutCubic = (t) => (t < 0.5
-      ? 4 * t * t * t
-      : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
-    const animateScrollTo = (targetY, duration) => new Promise((resolve) => {
-      const startY = window.scrollY;
-      const distance = targetY - startY;
-      const startTime = performance.now();
-
-      const step = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = easeInOutCubic(progress);
-        window.scrollTo(0, startY + distance * eased);
-        if (progress < 1) {
-          requestAnimationFrame(step);
-          return;
-        }
-        resolve();
-      };
-
-      requestAnimationFrame(step);
-    });
-
-    const goToSection = async (nextIndex) => {
-      const bounded = Math.max(0, Math.min(nextIndex, sections.length - 1));
-      if (bounded === currentSectionIndex || isTransitioning) return;
-      isTransitioning = true;
-      const targetY = window.scrollY + sections[bounded].getBoundingClientRect().top;
-      await animateScrollTo(targetY, sectionScrollDuration);
-      currentSectionIndex = bounded;
-      isTransitioning = false;
-    };
-
-    const onWheel = (event) => {
-      if (isTransitioning) {
-        event.preventDefault();
-        return;
-      }
-      if (Math.abs(event.deltaY) < 8) return;
-      event.preventDefault();
-      if (event.deltaY > 0) {
-        goToSection(currentSectionIndex + 1);
-      } else {
-        goToSection(currentSectionIndex - 1);
-      }
-    };
-
-    window.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('touchstart', (event) => {
-      touchStartY = event.changedTouches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchend', (event) => {
-      const touchEndY = event.changedTouches[0].clientY;
-      const deltaY = touchStartY - touchEndY;
-      if (Math.abs(deltaY) < 25 || isTransitioning) return;
-      if (deltaY > 0) {
-        goToSection(currentSectionIndex + 1);
-      } else {
-        goToSection(currentSectionIndex - 1);
-      }
-    }, { passive: true });
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          const index = Array.from(sections).indexOf(entry.target);
-          if (index >= 0) currentSectionIndex = index;
+        } else {
+          entry.target.classList.remove('is-visible');
         }
       });
     }, {
@@ -411,9 +367,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const blockObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        blockObserver.unobserve(entry.target);
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        } else {
+          entry.target.classList.remove('is-visible');
+        }
       });
     }, {
       threshold: 0.22,

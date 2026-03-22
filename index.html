@@ -13,9 +13,12 @@
 </head>
 <body class="intro-active">
   <div class="intro-video-overlay" id="intro-video-overlay" role="dialog" aria-label="Вступне відео">
-    <video id="intro-video-player" class="intro-video-player" muted playsinline webkit-playsinline preload="auto" poster="IMG_2120.jpg">
+    <video id="intro-video-player" class="intro-video-player" muted autoplay playsinline webkit-playsinline preload="auto" poster="IMG_2120.jpg">
       <source src="Gen-4%20Turbo%20Ultra%20realistic%20cinematic%20macro%20shot%20of%20a%20luxury%20wedding%20envelope%20filling%20the%20entire%20frame%20Background%20is%20soft%20beige%20gradient,%20no%20table,%20no%20objects%20Envelope%20is%20matte%20beige%20paperIn%20the%20ce%20(1).mp4" type="video/mp4">
     </video>
+    <audio id="intro-song" preload="auto">
+      <source src="perfect-ed-sheeran.mp3" type="audio/mpeg">
+    </audio>
     <div class="intro-tap-hint" id="intro-tap-hint" aria-hidden="true">
       <div class="intro-tap-circle">▶</div>
       <p>натисніть, щоб почати</p>
@@ -32,6 +35,7 @@
 
     <section class="announcement page-section" aria-label="Оголошення">
       <p>Так, нарешті це сталося!<br>Ми одружуємось! 💍<br>І цей день не буде повним без вас 🤍</p>
+      <p class="announcement-date">До зустрічі!</p>
       <p class="announcement-date">20 червня 2026</p>
     </section>
 
@@ -63,15 +67,14 @@
     <section class="details layout-grid page-section program-section">
       <div class="left">
         <section class="program" aria-label="Програма дня">
-          <h2 class="program-title">Програма</h2>
+          <h2 class="program-title">Таймінг</h2>
 
           <div class="schedule">
             <div class="schedule-line" aria-hidden="true"></div>
 
             <article class="schedule-item schedule-item--left">
-              <p class="schedule-date">20 червня 2026</p>
-              <h3>Welcome drinks</h3>
-              <p class="schedule-time">15:30</p>
+              <h3>Збір гостей, фуршет</h3>
+              <p class="schedule-time">13:00</p>
               <button
                 type="button"
                 class="schedule-btn"
@@ -84,15 +87,21 @@
             </article>
 
             <article class="schedule-item schedule-item--right">
-              <p class="schedule-date">20 червня 2026</p>
               <h3>Церемонія</h3>
-              <p class="schedule-time">16:00</p>
+              <p class="schedule-time">14:00</p>
             </article>
 
             <article class="schedule-item schedule-item--full">
-              <p class="schedule-date">20 червня 2026</p>
-              <h3>Reception</h3>
-              <p class="schedule-time">18:30</p>
+              <h3>Святковий бенкет</h3>
+              <p class="schedule-time">15:00</p>
+            </article>
+            <article class="schedule-item schedule-item--full">
+              <h3>Танці та розваги</h3>
+              <p class="schedule-time">17:00</p>
+            </article>
+             <article class="schedule-item schedule-item--full">
+              <h3>Вечірня церемонія</h3>
+              <p class="schedule-time">21:00</p>
             </article>
           </div>
         </section>
@@ -103,7 +112,8 @@
     <section class="details layout-grid page-section dresscode-section">
       <div class="left">
         <section class="dresscode" aria-label="Дрескод">
-          <h2>Дрескод</h2>
+          <h2>Дрес-код</h2>
+          <p>Будемо раді, якщо ви підтримаєте кольорову гаму нашого свята ✨</p>
           <div class="dresscode-palette" role="group" aria-label="Палітра дрескоду">
             <div class="dresscode-image-wrap" aria-label="Варіант образу 1">
               <img class="dresscode-image" src="photo_2026-03-18%2016.29.48.jpeg" alt="Приклад дрескоду 1">
@@ -120,7 +130,9 @@
             <div class="dresscode-image-wrap" aria-label="Варіант образу 6">
               <img class="dresscode-image" src="photo_2026-03-18%2016.29.53.jpeg" alt="Приклад дрескоду 6">
             </div>
-            <div class="dresscode-image-wrap" aria-label="Варіант образу 8">
+           
+            <p class="dresscode-men-note">Для чоловіків також доречні:</p>
+             <div class="dresscode-image-wrap" aria-label="Варіант образу 8">
               <img class="dresscode-image" src="photo_2026-03-18%2016.29.57.jpeg" alt="Приклад дрескоду 8">
             </div>
             <div class="dresscode-image-wrap" aria-label="Варіант образу 4">
@@ -136,13 +148,13 @@
 
     <section class="rsvp-section page-section">
       <div class="rsvp">
-        <h2>Підтвердити присутність</h2>
+        <h3>Підтвердьте, будь ласка, свою присутність</h2>
         <form id="rsvp-form">
-          <label>Ім'я
+          <label>Ім'я та прізвище
             <input type="text" id="name" required placeholder="Ваше ім'я">
           </label>
 
-          <label>Приходите?
+          <label>Чи плануєте ви бути на весіллі?
             <select id="attending">
               <option value="yes">Так, буду</option>
               <option value="no">Нажаль, ні</option>
@@ -164,7 +176,8 @@
     </section>
 
     <footer class="contact page-section">
-      <p>Питання: +380 99 123 4567</p>
+      <p>Ми щасливі розділити цей день саме з вами 💫</p>
+      <p>До зустрічі на нашому весіллі!</p>
     </footer>
   </main>
 
