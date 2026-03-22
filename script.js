@@ -46,9 +46,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
 
     let introStarted = false;
+    const tapHint = document.getElementById('intro-tap-hint');
+
     const startIntroPlayback = () => {
       if (introStarted) return;
       introStarted = true;
+      if (tapHint) tapHint.classList.add('is-hidden');
       const playPromise = introVideo.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
@@ -60,6 +63,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if (introOverlay) {
       introOverlay.addEventListener('pointerdown', startIntroPlayback, { once: true });
       introOverlay.addEventListener('click', startIntroPlayback, { once: true });
+      introOverlay.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
     }
   } else {
     unlockContent();
@@ -317,7 +321,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       currentSectionIndex = bounded;
       setTimeout(() => {
         isTransitioning = false;
-      }, 700);
+      }, 950);
     };
 
     const onWheel = (event) => {
@@ -325,7 +329,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         event.preventDefault();
         return;
       }
-      if (Math.abs(event.deltaY) < 12) return;
+      if (Math.abs(event.deltaY) < 8) return;
       event.preventDefault();
       if (event.deltaY > 0) {
         goToSection(currentSectionIndex + 1);
@@ -342,7 +346,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     window.addEventListener('touchend', (event) => {
       const touchEndY = event.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
-      if (Math.abs(deltaY) < 35 || isTransitioning) return;
+      if (Math.abs(deltaY) < 25 || isTransitioning) return;
       if (deltaY > 0) {
         goToSection(currentSectionIndex + 1);
       } else {
@@ -359,7 +363,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
       });
     }, {
-      threshold: 0.55
+      threshold: 0.4
     });
 
     sections.forEach((section) => observer.observe(section));

@@ -13,7 +13,6 @@ body{
   background: radial-gradient(ellipse at top left, #fff6f0 0%, #fffaf8 40%, #fff 100%);
   color:#222;
   -webkit-font-smoothing:antialiased;
-  scroll-snap-type:y mandatory;
 }
 .intro-video{ position:fixed; inset:0; background:#000; z-index:10000; display:flex; align-items:center; justify-content:center }
 .intro-video video{ width:100%; height:100%; object-fit:cover; display:block }
@@ -52,6 +51,41 @@ body.intro-reveal .intro-video-overlay{
   pointer-events:none;
 }
 
+.intro-tap-hint{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  color:#fff;
+  pointer-events:none;
+  transition:opacity 400ms ease;
+}
+
+.intro-tap-hint.is-hidden{ opacity:0; }
+
+.intro-tap-circle{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  animation:tap-pulse 1.8s ease-in-out infinite;
+}
+
+.intro-tap-hint p{
+  margin:0;
+  font-size:14px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  opacity:0.8;
+}
+
 .intro-video-player{
   width:100%;
   height:100%;
@@ -71,8 +105,6 @@ body.intro-reveal .intro-video-overlay{
   height:100svh;
   min-height:100svh;
   max-height:100svh;
-  scroll-snap-align:start;
-  scroll-snap-stop:always;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -306,12 +338,6 @@ input[type="text"], input[type="number"], select, textarea{
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto }
   body{ scroll-snap-type:none }
-  .page-section{
-    height:auto;
-    min-height:auto;
-    max-height:none;
-    overflow:visible;
-  }
   .scroll-animated .page-section{
     opacity:1;
     transform:none;
