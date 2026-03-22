@@ -83,11 +83,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     introVideo.addEventListener('play', () => {
       introStarted = true;
-      startSongPlayback().then((started) => {
-        if (tapHint) {
-          tapHint.classList.toggle('is-hidden', started);
-        }
-      });
+      if (tapHint) {
+        tapHint.classList.add('is-hidden');
+      }
+      startSongPlayback();
     });
 
     const startIntroPlayback = () => {
@@ -102,26 +101,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
       }
 
-      startSongPlayback().then((started) => {
-        if (tapHint) {
-          tapHint.classList.toggle('is-hidden', started);
-        }
-      });
+      startSongPlayback();
     };
 
     if (tapHint) {
-      tapHint.addEventListener('pointerdown', startIntroPlayback, { once: true });
-      tapHint.addEventListener('click', startIntroPlayback, { once: true });
-      tapHint.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
+      tapHint.addEventListener('pointerdown', startIntroPlayback);
+      tapHint.addEventListener('click', startIntroPlayback);
+      tapHint.addEventListener('touchstart', startIntroPlayback, { passive: true });
     } else if (introOverlay) {
-      introOverlay.addEventListener('pointerdown', startIntroPlayback, { once: true });
-      introOverlay.addEventListener('click', startIntroPlayback, { once: true });
-      introOverlay.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
+      introOverlay.addEventListener('pointerdown', startIntroPlayback);
+      introOverlay.addEventListener('click', startIntroPlayback);
+      introOverlay.addEventListener('touchstart', startIntroPlayback, { passive: true });
     }
 
-    introVideo.addEventListener('pointerdown', startIntroPlayback, { once: true });
-    introVideo.addEventListener('click', startIntroPlayback, { once: true });
-    introVideo.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
+    introVideo.addEventListener('pointerdown', startIntroPlayback);
+    introVideo.addEventListener('click', startIntroPlayback);
+    introVideo.addEventListener('touchstart', startIntroPlayback, { passive: true });
   } else {
     unlockContent();
     goToFirstSection();
