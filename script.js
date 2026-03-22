@@ -62,38 +62,50 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const tapHint = document.getElementById('intro-tap-hint');
 
     const startSongPlayback = () => {
-      if (!introSong || songStarted) return;
+      if (!introSong || songStarted) return Promise.resolve(songStarted);
       const songPromise = introSong.play();
       if (songPromise && typeof songPromise.catch === 'function') {
-        songPromise
+        return songPromise
           .then(() => {
             songStarted = true;
+            return songStarted;
           })
           .catch(() => {
             songStarted = false;
+            return songStarted;
           });
       } else {
         songStarted = true;
+        return Promise.resolve(songStarted);
       }
     };
 
     introVideo.addEventListener('play', () => {
       introStarted = true;
-      if (tapHint) tapHint.classList.add('is-hidden');
-      startSongPlayback();
+      startSongPlayback().then((started) => {
+        if (tapHint) {
+          tapHint.classList.toggle('is-hidden', started);
+        }
+      });
     });
 
     const startIntroPlayback = () => {
-      if (introStarted) return;
-      introStarted = true;
-      if (tapHint) tapHint.classList.add('is-hidden');
-      const playPromise = introVideo.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
-          introStarted = false;
-          if (tapHint) tapHint.classList.remove('is-hidden');
-        });
+      if (!introStarted) {
+        introStarted = true;
+        const playPromise = introVideo.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {
+            introStarted = false;
+            if (tapHint) tapHint.classList.remove('is-hidden');
+          });
+        }
       }
+
+      startSongPlayback().then((started) => {
+        if (tapHint) {
+          tapHint.classList.toggle('is-hidden', started);
+        }
+      });
     };
 
     if (tapHint) {
@@ -106,7 +118,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
       introOverlay.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
     }
 
-    startIntroPlayback();
+    introVideo.addEventListener('pointerdown', startIntroPlayback, { once: true });
+    introVideo.addEventListener('click', startIntroPlayback, { once: true });
+    introVideo.addEventListener('touchstart', startIntroPlayback, { once: true, passive: true });
   } else {
     unlockContent();
     goToFirstSection();
