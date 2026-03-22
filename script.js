@@ -17,9 +17,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.body.classList.add('intro-reveal');
   };
 
+  const goToFirstSection = () => {
+    const firstSection = document.querySelector('.hero.page-section') || document.querySelector('.page-section');
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    if (firstSection) {
+      firstSection.scrollIntoView({ block: 'start', behavior: 'auto' });
+    }
+  };
+
   const finishIntro = () => {
     if (!introOverlay) {
       unlockContent();
+      goToFirstSection();
       return;
     }
     introOverlay.classList.add('is-hidden');
@@ -33,6 +42,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }, { once: true });
     setTimeout(removeOverlay, 1300);
     unlockContent();
+    goToFirstSection();
   };
 
   if (introVideo) {
@@ -55,7 +65,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const playPromise = introVideo.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
-          introVideo.controls = true;
+          finishIntro();
         });
       }
     };
@@ -67,6 +77,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   } else {
     unlockContent();
+    goToFirstSection();
   }
 
   const form = document.getElementById('rsvp-form');
@@ -312,16 +323,40 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let currentSectionIndex = 0;
     let isTransitioning = false;
     let touchStartY = 0;
+    const sectionScrollDuration = 1300;
 
-    const goToSection = (nextIndex) => {
+    const easeInOutCubic = (t) => (t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+    const animateScrollTo = (targetY, duration) => new Promise((resolve) => {
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      const startTime = performance.now();
+
+      const step = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeInOutCubic(progress);
+        window.scrollTo(0, startY + distance * eased);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+          return;
+        }
+        resolve();
+      };
+
+      requestAnimationFrame(step);
+    });
+
+    const goToSection = async (nextIndex) => {
       const bounded = Math.max(0, Math.min(nextIndex, sections.length - 1));
       if (bounded === currentSectionIndex || isTransitioning) return;
       isTransitioning = true;
-      sections[bounded].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const targetY = window.scrollY + sections[bounded].getBoundingClientRect().top;
+      await animateScrollTo(targetY, sectionScrollDuration);
       currentSectionIndex = bounded;
-      setTimeout(() => {
-        isTransitioning = false;
-      }, 950);
+      isTransitioning = false;
     };
 
     const onWheel = (event) => {
