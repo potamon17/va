@@ -40,6 +40,8 @@ body.intro-active{
 body.intro-active .card{
   position:relative;
   z-index:1;
+  visibility:hidden;
+  pointer-events:none;
 }
 
 body.intro-reveal .intro-video-overlay{
