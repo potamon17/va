@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.body.classList.remove('intro-active');
     document.body.classList.remove('intro-reveal');
     if (siteContent) {
+      siteContent.removeAttribute('hidden');
       siteContent.removeAttribute('inert');
       siteContent.removeAttribute('aria-hidden');
     }
