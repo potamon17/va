@@ -433,6 +433,42 @@ input[type="text"], input[type="number"], select, textarea{
   text-shadow:0 6px 24px rgba(0,0,0,0.45);
 }
 
+.music-toggle{
+  position:fixed;
+  right:14px;
+  bottom:14px;
+  z-index:10020;
+  border:1px solid rgba(255,255,255,0.45);
+  background:rgba(19, 24, 29, 0.72);
+  color:#fff;
+  border-radius:999px;
+  padding:10px 14px;
+  font-size:14px;
+  line-height:1;
+  cursor:pointer;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  transition:transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.music-toggle:hover{
+  transform:translateY(-1px);
+}
+
+.music-toggle.is-playing{
+  background:rgba(68, 114, 86, 0.88);
+  border-color:rgba(221, 245, 231, 0.58);
+}
+
+@media(max-width:560px){
+  .music-toggle{
+    right:10px;
+    bottom:10px;
+    padding:9px 12px;
+    font-size:13px;
+  }
+}
+
 /* Larger screens */
 @media(min-width:720px){
   .card{ display:grid; gap:22px; align-items:start }

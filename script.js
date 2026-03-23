@@ -3,7 +3,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const introOverlay = document.getElementById('intro-video-overlay');
   const introVideo = document.getElementById('intro-video-player');
   const introSong = document.getElementById('intro-song');
+  const musicToggle = document.getElementById('music-toggle');
   const siteContent = document.getElementById('site-content');
+
+  const syncMusicToggleState = () => {
+    if (!musicToggle || !introSong) return;
+    const isPlaying = !introSong.paused && !introSong.ended;
+    musicToggle.classList.toggle('is-playing', isPlaying);
+    musicToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+    musicToggle.setAttribute('aria-label', isPlaying ? 'Поставити музику на паузу' : 'Увімкнути музику');
+    musicToggle.textContent = isPlaying ? '♫ Музика: Увімк.' : '♪ Музика: Вимк.';
+  };
 
   const unlockContent = () => {
     document.body.classList.remove('intro-active');
@@ -63,23 +73,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const tapHint = document.getElementById('intro-tap-hint');
 
     const startSongPlayback = () => {
-      if (!introSong || songStarted) return Promise.resolve(songStarted);
+      if (!introSong) return Promise.resolve(songStarted);
+      if (songStarted && !introSong.paused) return Promise.resolve(songStarted);
       const songPromise = introSong.play();
       if (songPromise && typeof songPromise.catch === 'function') {
         return songPromise
           .then(() => {
             songStarted = true;
+            syncMusicToggleState();
             return songStarted;
           })
           .catch(() => {
             songStarted = false;
+            syncMusicToggleState();
             return songStarted;
           });
       } else {
         songStarted = true;
+        syncMusicToggleState();
         return Promise.resolve(songStarted);
       }
     };
+
+    if (introSong) {
+      introSong.addEventListener('play', () => {
+        songStarted = true;
+        syncMusicToggleState();
+      });
+      introSong.addEventListener('pause', () => {
+        songStarted = false;
+        syncMusicToggleState();
+      });
+      introSong.addEventListener('ended', () => {
+        songStarted = false;
+        syncMusicToggleState();
+      });
+    }
 
     introVideo.addEventListener('play', () => {
       introStarted = true;
@@ -117,6 +146,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     introVideo.addEventListener('pointerdown', startIntroPlayback);
     introVideo.addEventListener('click', startIntroPlayback);
     introVideo.addEventListener('touchstart', startIntroPlayback, { passive: true });
+
+    if (musicToggle) {
+      musicToggle.addEventListener('click', () => {
+        if (!introSong) return;
+        if (introSong.paused) {
+          startSongPlayback();
+          return;
+        }
+        introSong.pause();
+      });
+      syncMusicToggleState();
+    }
   } else {
     unlockContent();
     goToFirstSection();
