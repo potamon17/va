@@ -506,5 +506,8 @@ input[type="text"], input[type="number"], select, textarea{
     transition:none;
   }
 }
-  
+
+.page-section .data P{
+  margin-bottom: 15px;
+}
 
