@@ -171,28 +171,28 @@
 
     <section style="background: #fdf6ee;" class="rsvp-section page-section">
       <div class="rsvp">
-        <h1 style="text-align: center;">Підтвердьте, будь ласка, свою присутність</h1>
+        <h1 style="text-align: center;">Будь ласка, підтвердьте свою присутність</h1>
         <form id="rsvp-form">
           <label>Ім'я та прізвище
-            <input type="text" id="name" required placeholder="Ваше ім'я">
+            <input type="text" id="name" required placeholder="Ваше ім'я та прізвище">
           </label>
 
-          <label>Чи плануєте ви бути на весіллі?
+          <label>Чи зможете ви бути з нами у цей день?
             <select id="attending">
-              <option value="yes">Так, буду</option>
-              <option value="no">Нажаль, ні</option>
+              <option value="yes">Так, із задоволенням</option>
+              <option value="no">Нажаль, не зможу</option>
             </select>
           </label>
 
           <label>Кількість гостей
-            <input type="number" id="guests" min="0" max="10" value="0">
+            <input type="number" id="guests" min="1" max="10" value="1">
           </label>
 
-          <label>Повідомлення
-            <textarea id="note" rows="3" placeholder="Побажання або деталі"></textarea>
+          <label>Коментар (за бажанням)
+            <textarea id="note" rows="3" placeholder="Запитання, побажання або інша важлива інформація."></textarea>
           </label>
 
-          <button type="submit" class="btn">Відправити</button>
+          <button type="submit" class="btn">Надіслати відповідь</button>
         </form>
         <div id="rsvp-result" class="result" aria-live="polite"></div>
       </div>
