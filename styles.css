@@ -362,7 +362,7 @@ body.intro-reveal .intro-video-overlay{
 
 .wishes-text{
   margin:0 0 16px;
-  font-size:clamp(20px, 2.8vw, 28px);
+  font-size: 18px;
   line-height:1.5;
 }
 
