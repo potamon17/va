@@ -309,7 +309,7 @@ body.intro-reveal .intro-video-overlay{
 .schedule-item--full{ grid-column:1 / -1; justify-self:center; text-align:center; max-width:680px; margin-top:6px }
 .schedule-date{ margin:0 0 6px; font-family:'Cormorant Garamond', Georgia, "Times New Roman", serif; font-style:italic; color:#496356; font-size:28px; line-height:1 }
 .schedule-item h3{ margin:0; letter-spacing:2px; color:#000; font-weight:500; font-size:36px }
-.schedule-time{ margin:10px 0 10px; color:#28463d; font-size:28px }
+.schedule-time{ margin:10px 0 10px; font-size:28px }
 .schedule-desc{ margin:0; color:#2f4b42; line-height:1.5; font-size:19px }
 .schedule-btn{ margin-top:14px; background:#9f845f; color:#fff; border:0; border-radius:0; padding:10px 20px; font-size:16px; cursor:pointer }
 .schedule-item--full::before {left: unset; right: unset; top: 0;}
@@ -406,7 +406,7 @@ body.intro-reveal .intro-video-overlay{
   .wishes-text{ font-size:18px }
   .wishes-link{ width:100%; max-width:320px; font-size:17px }
   .program{ margin-top:0 }
-  .program-title{ margin:0 0 16px; font-size:42px; color:#6f563d }
+  .program-title{ margin:0 0 16px; font-size:38px; color:#6f563d }
   .schedule{ grid-template-columns:1fr; gap:20px; max-width:100%; padding:0 }
   .schedule-line{ left:10px; top:8px; bottom:8px; transform:none }
   .schedule-item,
