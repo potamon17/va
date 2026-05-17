@@ -171,6 +171,66 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const secondsEl = document.getElementById('cd-seconds');
   const countdownNote = document.getElementById('countdown-note');
 
+  const withTimeout = async (promise, timeoutMs, timeoutMessage = 'Request timeout') => {
+    let timeoutId;
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
+    });
+
+    try {
+      return await Promise.race([promise, timeoutPromise]);
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  };
+
+  const sendRsvpViaClassicPost = async ({ name, attendingLabel, guests, note, submittedAt }) => {
+    const iframeName = `rsvp-frame-${Date.now()}`;
+    const iframe = document.createElement('iframe');
+    iframe.name = iframeName;
+    iframe.style.display = 'none';
+
+    const fallbackForm = document.createElement('form');
+    fallbackForm.method = 'POST';
+    fallbackForm.action = `https://formsubmit.co/${encodeURIComponent(RSVP_TARGET_EMAIL)}`;
+    fallbackForm.target = iframeName;
+    fallbackForm.style.display = 'none';
+
+    const fields = {
+      _subject: 'Нове підтвердження присутності на весілля',
+      _template: 'table',
+      _captcha: 'false',
+      _cc: 'kivaa1998@gmail.com',
+      "Ім\'я": name,
+      'Приходить': attendingLabel,
+      'Кількість гостей': String(guests),
+      'Повідомлення': note || '—',
+      'Час відправки': submittedAt
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      fallbackForm.appendChild(input);
+    });
+
+    document.body.appendChild(iframe);
+    document.body.appendChild(fallbackForm);
+
+    const submitPromise = new Promise((resolve) => {
+      iframe.addEventListener('load', () => resolve(true), { once: true });
+      fallbackForm.submit();
+      setTimeout(() => resolve(true), 2500);
+    });
+
+    await withTimeout(submitPromise, 5000, 'RSVP fallback submit timed out');
+
+    fallbackForm.remove();
+    iframe.remove();
+  };
+
   // Load saved RSVP if present
   const saved = localStorage.getItem('rsvp');
   if(saved){
@@ -205,33 +265,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const submittedAt = new Date(data.ts).toLocaleString('uk-UA');
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(RSVP_TARGET_EMAIL)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify({
-          _subject: 'Нове підтвердження присутності на весілля',
-          _template: 'table',
-          _captcha: 'false',
-          _cc: 'kivaa1998@gmail.com',
-          "Ім'я": data.name,
-          'Приходить': attendingLabel,
-          'Кількість гостей': data.guests,
-          'Повідомлення': data.note || '—',
-          'Час відправки': submittedAt
-        })
+      await sendRsvpViaClassicPost({
+        name: data.name,
+        attendingLabel,
+        guests: data.guests,
+        note: data.note,
+        submittedAt
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const payload = await response.json();
-      if (payload && payload.success === 'false') {
-        throw new Error(payload.message || 'FormSubmit rejected request');
-      }
     } catch (error) {
       if (result) {
         result.textContent = 'Не вдалося надіслати на пошту. Спробуйте ще раз.';
@@ -239,7 +279,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Відправити';
+        submitBtn.textContent = 'Надіслати відповідь';
       }
       console.warn('RSVP email send error:', error);
       return;
