@@ -214,7 +214,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
           note: note || '—',
           submitted_at: submittedAt,
           email: 'no-reply@andriy-viktoriia.com',
-          ccemail: RSVP_SECONDARY_EMAIL,
           botcheck: ''
         })
       }),
@@ -222,11 +221,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
       'Web3Forms request timed out'
     );
 
-    if (!response.ok) {
-      throw new Error(`Web3Forms HTTP ${response.status}`);
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch (_) {
+      payload = null;
     }
 
-    const payload = await response.json();
+    if (!response.ok) {
+      throw new Error(payload?.message || `Web3Forms HTTP ${response.status}`);
+    }
+
     if (!payload || !payload.success) {
       throw new Error(payload?.message || 'Web3Forms rejected request');
     }
