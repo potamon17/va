@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', ()=>{
   const RSVP_TARGET_EMAIL = 'tancorov.andriy@gmail.com';
+  const RSVP_SECONDARY_EMAIL = 'kivaa1998@gmail.com';
+  const WEB3FORMS_ACCESS_KEY = '465fb021-0642-48b7-8665-834a7b3b6b75';
+  const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+  const WEB3FORMS_TIMEOUT_MS = 12000;
   const introOverlay = document.getElementById('intro-video-overlay');
   const introVideo = document.getElementById('intro-video-player');
   const introSong = document.getElementById('intro-song');
@@ -184,6 +188,50 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   };
 
+  const isWeb3FormsConfigured = () => {
+    return Boolean(WEB3FORMS_ACCESS_KEY) && !WEB3FORMS_ACCESS_KEY.includes('PASTE_WEB3FORMS_ACCESS_KEY_HERE');
+  };
+
+  const sendRsvpViaWeb3Forms = async ({ name, attendingLabel, guests, note, submittedAt }) => {
+    if (!isWeb3FormsConfigured()) {
+      throw new Error('Web3Forms access key is not configured');
+    }
+
+    const response = await withTimeout(
+      fetch(WEB3FORMS_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: 'Нове підтвердження присутності на весілля',
+          from_name: 'Wedding RSVP',
+          name,
+          attending: attendingLabel,
+          guests: String(guests),
+          note: note || '—',
+          submitted_at: submittedAt,
+          email: 'no-reply@andriy-viktoriia.com',
+          ccemail: RSVP_SECONDARY_EMAIL,
+          botcheck: ''
+        })
+      }),
+      WEB3FORMS_TIMEOUT_MS,
+      'Web3Forms request timed out'
+    );
+
+    if (!response.ok) {
+      throw new Error(`Web3Forms HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    if (!payload || !payload.success) {
+      throw new Error(payload?.message || 'Web3Forms rejected request');
+    }
+  };
+
   const sendRsvpViaClassicPost = async ({ name, attendingLabel, guests, note, submittedAt }) => {
     const iframeName = `rsvp-frame-${Date.now()}`;
     const iframe = document.createElement('iframe');
@@ -192,7 +240,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const fallbackForm = document.createElement('form');
     fallbackForm.method = 'POST';
-    fallbackForm.action = `https://formsubmit.co/${encodeURIComponent(RSVP_TARGET_EMAIL)}`;
+    fallbackForm.action = `https://formsubmit.co/${RSVP_TARGET_EMAIL}`;
     fallbackForm.target = iframeName;
     fallbackForm.style.display = 'none';
 
@@ -200,7 +248,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       _subject: 'Нове підтвердження присутності на весілля',
       _template: 'table',
       _captcha: 'false',
-      _cc: 'kivaa1998@gmail.com',
+      _cc: RSVP_SECONDARY_EMAIL,
       "Ім\'я": name,
       'Приходить': attendingLabel,
       'Кількість гостей': String(guests),
@@ -219,13 +267,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.body.appendChild(iframe);
     document.body.appendChild(fallbackForm);
 
-    const submitPromise = new Promise((resolve) => {
-      iframe.addEventListener('load', () => resolve(true), { once: true });
+    const submitPromise = new Promise((resolve, reject) => {
+      let submitted = false;
+
+      iframe.addEventListener('load', () => {
+        if (!submitted) return;
+        resolve(true);
+      });
+
+      iframe.addEventListener('error', () => {
+        reject(new Error('RSVP iframe submission failed'));
+      });
+
+      submitted = true;
       fallbackForm.submit();
-      setTimeout(() => resolve(true), 2500);
     });
 
-    await withTimeout(submitPromise, 5000, 'RSVP fallback submit timed out');
+    await withTimeout(submitPromise, 15000, 'RSVP submit timed out');
 
     fallbackForm.remove();
     iframe.remove();
@@ -264,15 +322,41 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const attendingLabel = data.attending === 'yes' ? 'Так, буду' : 'Нажаль, ні';
     const submittedAt = new Date(data.ts).toLocaleString('uk-UA');
 
-    try {
-      await sendRsvpViaClassicPost({
-        name: data.name,
-        attendingLabel,
-        guests: data.guests,
-        note: data.note,
-        submittedAt
-      });
-    } catch (error) {
+    let sent = false;
+    let lastError = null;
+
+    if (isWeb3FormsConfigured()) {
+      try {
+        await sendRsvpViaWeb3Forms({
+          name: data.name,
+          attendingLabel,
+          guests: data.guests,
+          note: data.note,
+          submittedAt
+        });
+        sent = true;
+      } catch (error) {
+        lastError = error;
+        console.warn('RSVP web3forms send error:', error);
+      }
+    }
+
+    if (!sent) {
+      try {
+        await sendRsvpViaClassicPost({
+          name: data.name,
+          attendingLabel,
+          guests: data.guests,
+          note: data.note,
+          submittedAt
+        });
+        sent = true;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    if (!sent) {
       if (result) {
         result.textContent = 'Не вдалося надіслати на пошту. Спробуйте ще раз.';
         result.style.color = '#b42318';
@@ -281,7 +365,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         submitBtn.disabled = false;
         submitBtn.textContent = 'Надіслати відповідь';
       }
-      console.warn('RSVP email send error:', error);
+      console.warn('RSVP email send error:', lastError);
       return;
     }
 
